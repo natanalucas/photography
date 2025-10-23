@@ -1,0 +1,27 @@
+{
+    "navbar": {
+      "gallery": "Gallery",
+      "contact": "Contact",
+      "toggle_lang_to": "FR"
+    },
+    "common": {
+      "language": "EN"
+    },
+    "voir_plus": "See more",
+    "descriptions": {
+      "desc_1": "Description 1",
+      "desc_2": "Description 2",
+      "desc_3": "Description 3",
+      "desc_4": "Description 4",
+      "desc_5": "Description 5",
+      "desc_6": "Description 6",
+      "desc_7": "Description 7",
+      "desc_8": "Description 8"
+    },
+    "page_detail": {
+      "title": "WORK DETAIL #",
+      "back_to_gallery": "Back to gallery",
+      "other_works": "Other Works"
+    },
+    "citation": "Développeur web passionné, je transforme les idées en solutions numériques élégantes et performantes."
+}

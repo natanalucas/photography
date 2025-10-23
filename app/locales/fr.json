@@ -1,0 +1,29 @@
+{
+    "navbar": {
+      "gallery": "Galerie",
+      "contact": "Contact",
+      "toggle_lang_to": "EN"
+    },
+    "common": {
+      "language": "FR"
+    },
+    "voir_plus": "Voir plus",
+    "descriptions": {
+      "desc_1": "Description 1",
+      "desc_2": "Description 2",
+      "desc_3": "Description 3",
+      "desc_4": "Description 4",
+      "desc_5": "Description 5",
+      "desc_6": "Description 6",
+      "desc_7": "Description 7",
+      "desc_8": "Description 8"
+    },
+    "page_detail": {
+      "title": "DÉTAIL DE L'ŒUVRE #",
+      "back_to_gallery": "Retour à la galerie",
+      "other_works": "Autres réalisations"
+    },
+    "citation": "As a passionate web developer, I transform ideas into elegant and powerful digital solutions.",
+    "retour_gallerie" : "Retour à la galerie"
+
+}

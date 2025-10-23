@@ -1,0 +1,269 @@
+// app/PortfolioGallery.tsx
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom'; 
+import { motion } from 'framer-motion'; 
+
+// ====================================================================
+// 1. Composant Modale (Lightbox) - CORRECTION DE LA FAUTE DE FRAPPE
+// ====================================================================
+// NOTE: Les types TypeScript pour imageUrl et onClose sont manquants mais le correctif de logique est appliqué.
+const ImageModal = ({ imageUrl, onClose }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Gère le body scroll et le padding (pour empêcher le contenu de sauter)
+  useEffect(() => {
+    if (!imageUrl) return;
+
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    
+    // CORRECTION : scrollBarBarWidth n'est pas défini. Utiliser scrollBarWidth.
+    document.body.style.paddingRight = `${scrollBarWidth}px`; 
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '0';
+    };
+  }, [imageUrl]); 
+
+  if (!imageUrl || !mounted) return null;
+
+  return createPortal(
+    <div 
+      // La couleur de fond de la modale est fixe et sombre
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 animate-in fade-in duration-300 backdrop-blur-sm"
+      onClick={onClose} 
+    >
+      <motion.div 
+        className="relative max-w-5xl max-h-[90vh] overflow-y-auto p-4 animate-in fade-in zoom-in duration-300"
+        onClick={e => e.stopPropagation()} 
+      >
+        <img 
+          src={imageUrl} 
+          alt="Aperçu en taille réelle" 
+          className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+        />
+      </motion.div>
+
+      <button 
+        className="absolute top-4 right-4 text-white text-3xl font-bold p-2 bg-black/50 rounded-full hover:bg-black/70 transition z-50"
+        onClick={onClose}
+      >
+        &times;
+      </button>
+    </div>,
+    document.body 
+  );
+};
+
+// ====================================================================
+// 2. Composant Galerie (PortfolioGallery)
+// ====================================================================
+const PortfolioGallery = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageClick = (imageUrl) => { setSelectedImage(imageUrl); };
+  const handleCloseModal = () => { setSelectedImage(null); };
+
+  const imageContainerClasses = "cursor-pointer";
+
+  // Variantes Framer Motion
+  const mainVariants = {
+    hidden: { opacity: 0, y: 100 },
+    visible: { 
+        opacity: 1, 
+        y: 0,
+        transition: { 
+            duration: 1.2, 
+            ease: "easeOut",
+            when: "beforeChildren", 
+            staggerChildren: 0.1, 
+        }
+    },
+  };
+
+  const leftImageVariants = {
+    hidden: { x: -200, opacity: 0 }, 
+    visible: { 
+        x: 0, 
+        opacity: 1, 
+        transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
+  const rightImageVariants = {
+    hidden: { x: 200, opacity: 0 }, 
+    visible: { 
+        x: 0, 
+        opacity: 1, 
+        transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
+
+  return (
+    <motion.div
+        className="relative w-full h-screen overflow-visible"
+        variants={mainVariants} 
+        initial="hidden"        
+        whileInView="visible"   
+        viewport={{ once: false, amount: 0.5 }} 
+    > 
+      
+      <ImageModal imageUrl={selectedImage} onClose={handleCloseModal} />
+
+      {/* 🌟 EFFET "NUAGES FLOUX" HAUT */}
+      {/* Les classes 'backdrop-blur-md' ont été retirées comme demandé précédemment. */}
+      
+      {/* Mode CLAIR : Visible en light:, caché en dark:hidden */}
+      <div 
+          className="absolute top-0 left-0 w-full h-32 z-20 pointer-events-none dark:hidden" 
+      />
+      
+      {/* Mode SOMBRE : Caché en light:, visible en dark:block */}
+      <div 
+          className="absolute top-0 left-0 w-full h-32 z-20 pointer-events-none hidden dark:block" 
+      />
+      
+      {/* 🌟 EFFET "NUAGES FLOUX" BAS */}
+
+      {/* Mode CLAIR : Visible en light:, caché en dark:hidden */}
+      <div 
+          className="absolute bottom-0 left-0 w-full h-32 z-20 pointer-events-none dark:hidden" 
+      />
+
+      {/* Mode SOMBRE : Caché en light:, visible en dark:block */}
+      <div 
+          className="absolute bottom-0 left-0 w-full h-32 z-20 pointer-events-none hidden dark:block" 
+      />
+    
+      {/* Conteneur de gauche : Images à z-40 pour être CLICABLE */}
+      <div className="absolute top-0 left-5 h-full w-1/3 flex flex-col items-start justify-around -translate-x-24 z-[40]">
+        
+        {/* ... (Blocs d'images à gauche) ... */}
+        <motion.div 
+          className={`w-[90%] h-[35%] -rotate-[9deg] transform origin-top-left -translate-y-10 ${imageContainerClasses}`}
+          onClick={() => handleImageClick("/gallery/24.jpeg")}
+          variants={leftImageVariants} 
+        >
+            <img
+              src="/gallery/24.jpeg"
+              alt="Image inclinée en haut à gauche"
+              className="w-full h-full object-cover rounded-lg"
+            />
+        </motion.div>
+        
+        <motion.div 
+          className={`w-[90%] h-[35%] rotate-[5deg] transform origin-top-left -translate-y-12 ${imageContainerClasses}`}
+          onClick={() => handleImageClick("/gallery/21.jpeg")}
+          variants={leftImageVariants}
+        >
+            <img
+              src="/gallery/21.jpeg"
+              alt="Image inclinée au milieu à gauche"
+              className="w-full h-full object-cover rounded-lg"
+            />
+        </motion.div>
+
+        <motion.div 
+          className={`w-[90%] h-[35%] -rotate-[10deg] transform origin-top-left ${imageContainerClasses}`}
+          onClick={() => handleImageClick("/gallery/20.jpeg")}
+          variants={leftImageVariants}
+        >
+            <img
+              src="/gallery/20.jpeg"
+              alt="Image inclinée en bas à gauche"
+              className="w-full h-full object-cover rounded-lg"
+            />
+        </motion.div>
+      </div>
+
+      {/* Contenu central : z-30. */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-30 -translate-y-5 pointer-events-none">
+        
+        {/* Cercle central - adaptation des couleurs */}
+        <div className="bg-white/10 p-2 rounded-full border border-white/30 mb-4 w-80 h-80 flex items-center justify-center pointer-events-auto
+                        dark:bg-gray-800/20 dark:border-gray-700/50">
+          <img
+            src="/gallery/23.jpeg"
+            alt="Photo de profil"
+            className="w-full h-full rounded-full object-cover"
+          />
+        </div>
+        
+        <h1
+            className="font-semibold text-5xl bg-clip-text text-transparent pointer-events-auto"
+            style={{ backgroundImage: "linear-gradient(to right, #70cdff, #015d54)" }}
+            >
+            Kevin RAMAROHETRA
+        </h1>
+        {/* Texte de contact - adaptation des couleurs */}
+        <p className="text-gray-700 dark:text-gray-400 mb-4 text-xl pointer-events-auto">
+          kevin.ramarohetra@gmail.com
+        </p>
+        <br/>
+        
+        <div className="flex flex-col items-center px-4 pointer-events-auto">
+          {/* SVG Quote Icon - adaptation de la couleur de remplissage */}
+          <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#4A5568" viewBox="0 0 18 14">
+            <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z"
+            className="fill-gray-700 dark:fill-gray-400" /> 
+          </svg>
+          
+          {/* Texte de la citation - adaptation des couleurs */}
+          <p className="text-gray-700 dark:text-gray-400 italic text-lg text-center mb-2 max-w-lg text-xl">
+            Développeur web passionné, je transforme les idées en solutions numériques élégantes et performantes.
+          </p>
+        </div>
+      </div>
+
+      {/* Conteneur de droite : Images à z-40 pour être CLICABLE */}
+      <div className="absolute top-0 right-0 h-full w-1/3 flex flex-col items-end justify-around translate-x-24 z-[40]">
+        
+        <motion.div 
+          className={`w-[90%] h-[35%] rotate-[16deg] transform origin-top-right translate-y-20 ${imageContainerClasses}`}
+          onClick={() => handleImageClick("/gallery/19.jpeg")}
+          variants={rightImageVariants}
+        >
+            <img
+              src="/gallery/19.jpeg"
+              alt="Image inclinée en haut à droite"
+              className="w-full h-full object-cover rounded-lg"
+            />
+        </motion.div>
+
+        <motion.div 
+          className={`w-[90%] h-[35%] -rotate-[10deg] transform origin-top-right -translate-y-12 ${imageContainerClasses}`}
+          onClick={() => handleImageClick("/gallery/22.jpeg")}
+          variants={rightImageVariants}
+        >
+            <img
+              src="/gallery/22.jpeg"
+              alt="Image inclinée au milieu à droite"
+              className="w-full h-full object-cover rounded-lg"
+            />
+        </motion.div>
+
+        <motion.div 
+          className={`w-[90%] h-[35%] rotate-[10deg] transform origin-top-right ${imageContainerClasses}`}
+          onClick={() => handleImageClick("/gallery/12.jpg")}
+          variants={rightImageVariants}
+        >
+            <img
+              src="/gallery/12.jpg"
+              alt="Image inclinée en bas à droite"
+              className="w-full h-full object-cover rounded-lg"
+            />
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default PortfolioGallery;
