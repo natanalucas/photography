@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, useCallback, useLayoutEffect } from "react
 import { Linkedin, Instagram, Facebook, Sun, Moon, Image as ImageIcon, Mail } from "lucide-react"; 
 import { useLanguage } from './context/LanguageContext';
 import { useTheme } from 'next-themes'; 
-
+import React from 'react'; // Importer React si vous utilisez des types comme React.CSSProperties ailleurs
 
 // ====================================================================
 // ThemeToggle (Corrige l'hydratation)
@@ -46,7 +46,6 @@ const ThemeToggle = () => {
 export default function Navbar() {
   const { t, toggleLanguage } = useLanguage();
   
-  // L'état initial est false, donc le serveur rendra le style par défaut (top-3)
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState("gallery"); 
 
@@ -74,8 +73,6 @@ export default function Navbar() {
 
   // Gestion du scroll pour l'effet de navbar
   useEffect(() => {
-    // Le serveur rend avec scrolled=false. 
-    // Au moment de l'hydratation, useEffect se déclenche, et la logique client commence.
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -87,7 +84,8 @@ export default function Navbar() {
     const currentIndex = menuItems.findIndex(item => item.nameKey === activeTab);
     
     const currentSpan = spanRefs.current[currentIndex];
-    const menuContainer = tabRefs.current[0]?.parentElement;
+    // S'assurer qu'il y a un conteneur et qu'il est monté
+    const menuContainer = tabRefs.current[0]?.parentElement; 
 
     if (currentSpan && menuContainer) {
         const spanRect = currentSpan.getBoundingClientRect();
@@ -113,6 +111,7 @@ export default function Navbar() {
   useEffect(() => {
     window.addEventListener('resize', calculateUnderlinePosition);
     
+    // Délai pour s'assurer que le rendu est stable après le montage
     const timeoutId = setTimeout(calculateUnderlinePosition, 100);
 
     return () => {
@@ -121,10 +120,9 @@ export default function Navbar() {
     }
   }, [calculateUnderlinePosition]);
 
-  // ** CORRECTION APPLIQUÉE ICI **
-  // Le serveur rend la classe par défaut (top-3). Le client se base sur cette classe, puis 
-  // la met à jour vers top-0 si scrolled devient true.
-  const topPositionClass = scrolled ? 'top-0' : 'top-0';
+  // La classe est 'top-0' quelle que soit la position, car la barre est fixe. 
+  // L'effet de scroll peut être appliqué via 'scrolled' pour changer la shadow/couleur si désiré.
+  const topPositionClass = 'top-0'; 
 
   return (
     <nav 
@@ -156,7 +154,8 @@ export default function Navbar() {
                 return (
                   <button
                     key={item.id}
-                    ref={(el) => (tabRefs.current[index] = el)}
+                    // ✅ CORRIGÉ: Utiliser des accolades pour que la fonction ref retourne 'void'
+                    ref={(el) => { tabRefs.current[index] = el; }}
                     onClick={() => {
                       setActiveTab(item.nameKey); 
                       
@@ -171,7 +170,8 @@ export default function Navbar() {
                   >
                     {/* Le span porte le padding horizontal et la classe inline-block */}
                     <span 
-                        ref={(el) => (spanRefs.current[index] = el)} 
+                        // ✅ CORRIGÉ: Utiliser des accolades pour que la fonction ref retourne 'void'
+                        ref={(el) => { spanRefs.current[index] = el; }} 
                         className={`inline-block px-2 ${isActive 
                             ? "bg-clip-text text-transparent bg-my-gradient font-bold" 
                             : "text-gray-700 dark:text-gray-300"
