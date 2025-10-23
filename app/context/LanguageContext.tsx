@@ -2,14 +2,18 @@
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import fr from '../locales/fr.json'; // Importez vos fichiers de traduction
+import fr from '../locales/fr.json'; 
 import en from '../locales/en.json';
 
+// Utiliser 'FR' | 'EN' comme type littéral pour plus de sécurité
 type Language = 'FR' | 'EN';
 
-interface Translation {
-  [key: string]: any;
-}
+// Définir un type récursif pour les objets de traduction.
+// Cela permet d'avoir des objets imbriqués sans utiliser 'any'.
+// Nous utilisons 'unknown' pour la valeur finale, car on ne sait pas si c'est une string ou un autre objet.
+type Translation = {
+  [key: string]: string | Translation;
+};
 
 interface LanguageContextType {
   language: Language;
@@ -19,7 +23,8 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const translations: Record<Language, Translation> = { FR: fr, EN: en };
+// Ici, nous utilisons l'interface Translation pour typer nos imports
+const translations: Record<Language, Translation> = { FR: fr, EN: en } as Record<Language, Translation>;
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<Language>('FR');
@@ -29,15 +34,31 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const t = (key: string): string => {
-    // Cette fonction trouve la clé (ex: "navbar.gallery") dans le fichier de langue actuel
     const keys = key.split('.');
-    let result = translations[language] as any;
+    
+    // Initialiser le résultat avec le type plus sûr 'Translation'
+    let result: string | Translation | undefined = translations[language];
     
     for (const k of keys) {
-      if (!result || typeof result !== 'object') return key;
-      result = result[k];
+      // 1. Vérifier si le résultat est toujours un objet avant de continuer
+      if (!result || typeof result !== 'object') {
+        // Si ce n'est pas un objet ou s'il est undefined, on retourne la clé
+        return key; 
+      }
+      
+      // 2. On accède à la sous-clé. Nous devons forcer le type à 'Translation'
+      // pour permettre l'itération, ou 'string' pour la valeur finale.
+      // TypeScript nécessite cette assertion pour naviguer dans l'objet.
+      result = (result as Translation)[k];
     }
-    return result || key;
+
+    // 3. Vérifier que le résultat final est une chaîne de caractères
+    if (typeof result === 'string') {
+      return result;
+    }
+    
+    // Si la clé n'est pas trouvée ou n'est pas une string
+    return key; 
   };
 
   return (
