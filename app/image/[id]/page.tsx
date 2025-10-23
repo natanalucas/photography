@@ -1,14 +1,24 @@
 "use client";
 
-import { notFound, useParams } from 'next/navigation';
+// 1. CORRECTION: Suppression de 'notFound'
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeft, X, Frown } from 'lucide-react'; 
 import { useState, useEffect } from 'react';
+import React from 'react'; // Importer React pour React.CSSProperties
 
 import { images } from '@/app/data/galleryData';
 import { useLanguage } from '@/app/context/LanguageContext'; 
 
-const getNextImage = (id: number) => {
+// --- Fonctions utilitaires ---
+
+interface GalleryImage {
+    id: number;
+    src: string;
+    altKey: string;
+}
+
+const getNextImage = (id: number): [GalleryImage, GalleryImage] | null => {
     const validImageIds = images.map(img => img.id);
     const currentIndex = validImageIds.indexOf(id);
     if (currentIndex === -1) return null;
@@ -26,30 +36,31 @@ const getNextImage = (id: number) => {
     return [nextImage1, nextImage2];
 };
 
+// --- Composant principal ---
 
 export default function ImageDetail() {
     const { t } = useLanguage(); 
     
-    // ⭐️ AJOUT: État de montage pour résoudre l'hydratation
+    // État de montage pour résoudre l'hydratation
     const [mounted, setMounted] = useState(false);
     
-    const gradientTextStyle = {
+    const gradientTextStyle: React.CSSProperties = {
         backgroundImage: 'linear-gradient(to right, #70cdff, #015d54)', 
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         backgroundClip: 'text', 
-    } as React.CSSProperties;
+    };
 
-
-    // --- Début des Hooks : DOIVENT TOUS ÊTRE NON-CONDITIONNELS ---
+    // --- Début des Hooks ---
     const params = useParams();
-    const imageId = parseInt(params.id as string, 10);
+    // Assurez-vous que params.id est traité comme une chaîne avant parseInt
+    const imageId = parseInt(params.id as string, 10); 
 
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [hasLoaded, setHasLoaded] = useState(false);
     const [hasLightboxAnimated, setHasLightboxAnimated] = useState(false);
 
-    // ⭐️ AJOUT: useEffect pour gérer le montage côté client
+    // useEffect pour gérer le montage côté client (hydratation)
     useEffect(() => {
         setMounted(true);
     }, []);
@@ -68,12 +79,14 @@ export default function ImageDetail() {
     useEffect(() => {
         let timer: NodeJS.Timeout | undefined;
         if (isLightboxOpen) {
+            // Empêcher le défilement du corps
             const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
             document.body.style.overflow = 'hidden'; 
             document.body.style.paddingRight = `${scrollBarWidth}px`; 
 
             timer = setTimeout(() => setHasLightboxAnimated(true), 10);
         } else {
+            // Rétablir le défilement
             document.body.style.overflow = 'auto';
             document.body.style.paddingRight = '0';
             setHasLightboxAnimated(false);
@@ -91,18 +104,19 @@ export default function ImageDetail() {
     const image = images.find(img => img.id === imageId);
     const nextImages = getNextImage(imageId);
 
-    // DÉPLACÉ APRÈS TOUS LES HOOKS pour respecter les règles de React.
+    // Affichage de l'erreur 404 personnalisée si l'image n'est pas trouvée
     if (!image) {
-        // Personnalisation de la page 404
         return (
             <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 text-center p-8">
                 <Frown className="w-20 h-20 mb-6 text-gray-400 dark:text-gray-600" />
+                
+                {/* 2. CORRECTION: Apostrophes échappées */}
                 <p 
                     className="text-3xl sm:text-4xl font-bold mb-8"
                     style={gradientTextStyle} 
                 >
-                    Nous n'avons pas pu trouver l'œuvre que vous recherchez. 
-                    Elle a peut-être été déplacée ou n'a jamais existé.
+                    Nous n&apos;avons pas pu trouver l&apos;œuvre que vous recherchez. 
+                    Elle a peut-être été déplacée ou n&apos;a jamais existé.
                 </p>
                 <Link
                     href="/"
@@ -192,14 +206,14 @@ export default function ImageDetail() {
                                 {/* Zone de texte avec max-hauteur et défilement */}
                                 <div className="max-h-60 overflow-y-auto pr-2 relative z-10">
                                     
-                                    {/* 💥 CORRECTION DE L'HYDRATATION APPLIQUÉE ICI 💥 */}
+                                    {/* Affichage conditionnel basé sur l'état 'mounted' */}
                                     {mounted ? (
                                         // Affiche le contenu traduit UNIQUEMENT après l'hydratation
                                         <p className="text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic pl-3">
                                             {t(`descriptions.${image.altKey}`)}
                                         </p>
                                     ) : (
-                                        // Affiche un placeholder (squelette) durant la première passe du SSR
+                                        // Affiche un placeholder (squelette) durant le SSR
                                         <p className="text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic pl-3">
                                             <span className="inline-block w-full h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2 animate-pulse"></span>
                                             <span className="inline-block w-3/4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></span>
