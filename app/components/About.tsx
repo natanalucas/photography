@@ -1,15 +1,17 @@
-// app/components/About.tsx
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
-import { motion } from "framer-motion";
+// Importer 'motion' et 'Variants'
+import { motion, Variants } from "framer-motion"; 
 
 export default function About() {
     // Variantes pour l'animation de l'image (vient de la gauche)
-  const imageVariants = {
+    // ✅ CORRECTION : Typer explicitement l'objet en 'Variants'
+  const imageVariants: Variants = { 
     hidden: { opacity: 0, x: -100 },
-    visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: "easeOut" } },
+    // 'easeOut' est une chaîne de caractères reconnue par Framer Motion
+    visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: "easeOut" } }, 
   };
   return (
     <motion.section
