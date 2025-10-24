@@ -1,15 +1,23 @@
-// app/PortfolioGallery.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom'; 
-import { motion } from 'framer-motion'; 
+import { motion, Variants } from 'framer-motion'; // Ajout de Variants pour le typage des animations
 
 // ====================================================================
-// 1. Composant Modale (Lightbox) - CORRECTION DE LA FAUTE DE FRAPPE
+// 1. Définition des types (Interface)
 // ====================================================================
-// NOTE: Les types TypeScript pour imageUrl et onClose sont manquants mais le correctif de logique est appliqué.
-const ImageModal = ({ imageUrl, onClose }) => {
+
+interface ImageModalProps {
+    imageUrl: string | null;
+    onClose: () => void;
+}
+
+// ====================================================================
+// 2. Composant Modale (Lightbox) - CORRECTION APPLIQUÉE
+// ====================================================================
+// ✅ CORRECTION : Ajout de ImageModalProps pour typer les props
+const ImageModal = ({ imageUrl, onClose }: ImageModalProps) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -63,18 +71,20 @@ const ImageModal = ({ imageUrl, onClose }) => {
 };
 
 // ====================================================================
-// 2. Composant Galerie (PortfolioGallery)
+// 3. Composant Galerie (PortfolioGallery)
 // ====================================================================
 const PortfolioGallery = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  // ✅ CORRECTION : Typer l'état pour accepter une chaîne de caractères ou null
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const handleImageClick = (imageUrl) => { setSelectedImage(imageUrl); };
+  // ✅ CORRECTION : Typer l'argument de la fonction
+  const handleImageClick = (imageUrl: string) => { setSelectedImage(imageUrl); };
   const handleCloseModal = () => { setSelectedImage(null); };
 
   const imageContainerClasses = "cursor-pointer";
 
-  // Variantes Framer Motion
-  const mainVariants = {
+  // Variantes Framer Motion (typage optionnel pour plus de sécurité)
+  const mainVariants: Variants = {
     hidden: { opacity: 0, y: 100 },
     visible: { 
         opacity: 1, 
@@ -88,7 +98,7 @@ const PortfolioGallery = () => {
     },
   };
 
-  const leftImageVariants = {
+  const leftImageVariants: Variants = {
     hidden: { x: -200, opacity: 0 }, 
     visible: { 
         x: 0, 
@@ -97,7 +107,7 @@ const PortfolioGallery = () => {
     },
   };
 
-  const rightImageVariants = {
+  const rightImageVariants: Variants = {
     hidden: { x: 200, opacity: 0 }, 
     visible: { 
         x: 0, 
@@ -119,7 +129,6 @@ const PortfolioGallery = () => {
       <ImageModal imageUrl={selectedImage} onClose={handleCloseModal} />
 
       {/* 🌟 EFFET "NUAGES FLOUX" HAUT */}
-      {/* Les classes 'backdrop-blur-md' ont été retirées comme demandé précédemment. */}
       
       {/* Mode CLAIR : Visible en light:, caché en dark:hidden */}
       <div 
