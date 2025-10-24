@@ -153,7 +153,8 @@ const PortfolioGallery = () => {
       />
     
       {/* Conteneur de gauche : Images à z-40 pour être CLICABLE */}
-      <div className="absolute top-15 left-50 h-full w-1/3 flex flex-col items-start justify-around -translate-x-24 z-[40]">
+      {/* J'ai augmenté la translation latérale pour que les images s'éloignent davantage sur les grands écrans. */}
+      <div className="absolute top-15 left-50 h-full w-1/3 flex flex-col items-start justify-around -translate-x-24 xl:-translate-x-48 z-[40]">
         
         {/* ... (Blocs d'images à gauche) ... */}
         <motion.div 
@@ -194,10 +195,13 @@ const PortfolioGallery = () => {
       </div>
 
       {/* Contenu central : z-30. */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-30 -translate-y-5 pointer-events-none">
+      {/* J'ai augmenté la translation Y pour que le bloc soit centré par rapport aux images latérales */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-30 -translate-y-5 xl:-translate-y-10 pointer-events-none">
         
-        {/* Cercle central - adaptation des couleurs */}
-        <div className="bg-white/10 p-2 rounded-full border border-white/30 mb-4 w-80 h-80 flex items-center justify-center pointer-events-auto
+        {/* Cercle central - CORRECTION TAILLE */}
+        <div className="bg-white/10 p-2 rounded-full border border-white/30 mb-4 
+                        w-80 h-80 lg:w-80 lg:h-80 xl:w-96 xl:h-96 2xl:w-[28rem] 2xl:h-[28rem]
+                        flex items-center justify-center pointer-events-auto
                         dark:bg-gray-800/20 dark:border-gray-700/50">
           <img
             src="/gallery/23.jpeg"
@@ -206,34 +210,39 @@ const PortfolioGallery = () => {
           />
         </div>
         
+        {/* Nom - CORRECTION TAILLE */}
         <h1
-            className="font-semibold text-5xl bg-clip-text text-transparent pointer-events-auto"
+            className="font-semibold text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl bg-clip-text text-transparent pointer-events-auto"
             style={{ backgroundImage: "linear-gradient(to right, #70cdff, #015d54)" }}
             >
             Kevin RAMAROHETRA
         </h1>
-        {/* Texte de contact - adaptation des couleurs */}
-        <p className="text-gray-700 dark:text-gray-400 mb-4 text-xl pointer-events-auto">
+        
+        {/* Email - CORRECTION TAILLE */}
+        <p className="text-gray-700 dark:text-gray-400 mb-4 text-xl lg:text-2xl xl:text-2xl pointer-events-auto">
           kevin.ramarohetra@gmail.com
         </p>
         <br/>
         
         <div className="flex flex-col items-center px-4 pointer-events-auto">
-          {/* SVG Quote Icon - adaptation de la couleur de remplissage */}
-          <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#4A5568" viewBox="0 0 18 14">
+          {/* SVG Quote Icon - CORRECTION TAILLE */}
+          <svg className="w-6 h-6 lg:w-8 lg:h-8 xl:w-10 xl:h-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#4A5568" viewBox="0 0 18 14">
             <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z"
             className="fill-gray-700 dark:fill-gray-400" /> 
           </svg>
           
-          {/* Texte de la citation - adaptation des couleurs */}
-          <p className="text-gray-700 dark:text-gray-400 italic text-lg text-center mb-2 max-w-lg text-xl">
-            Développeur web passionné, je transforme les idées en solutions numériques élégantes et performantes.
+          {/* Texte de la citation - CORRECTION TAILLE */}
+          <p className="text-gray-700 dark:text-gray-400 italic 
+                      text-lg lg:text-xl xl:text-xl 2xl:text-xl 
+                      text-center mb-2 max-w-lg xl:max-w-xl pointer-events-auto">
+           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Modi numquam accusantium dolores natus officiis quaerat? Consequatur quasi, amet laudantium quo assumenda ducimus magni veniam, quas ipsum rerum vel tempore quidem.
           </p>
         </div>
       </div>
 
       {/* Conteneur de droite : Images à z-40 pour être CLICABLE */}
-      <div className="absolute top-5 right-50 h-full w-1/3 flex flex-col items-end justify-around translate-x-24 z-[40]">
+      {/* J'ai augmenté la translation latérale pour que les images s'éloignent davantage sur les grands écrans. */}
+      <div className="absolute top-5 right-50 h-full w-1/3 flex flex-col items-end justify-around translate-x-24 xl:translate-x-48 z-[40]">
         
         <motion.div 
           className={`w-[70%] h-[35%] rotate-[16deg] transform origin-top-right translate-y-20 ${imageContainerClasses}`}
