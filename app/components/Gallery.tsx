@@ -44,12 +44,16 @@ export default function Gallery() {
 
   return (
     <>
-        <section className="max-w-7xl mx-auto px-4 py-15" id="gallery">
+        {/* ✅ CORRECTION 1: Augmentation du padding horizontal sur la section */}
+        <section className="max-w-screen-2xl mx-auto px-6 py-15" id="gallery">
             
             {/* 🟢 CHANGEMENT CLÉ: Utilisation des classes 'columns-x' pour Masonry */}
-            <div className="columns-2 md:columns-3 lg:columns-4 gap-1">
+            {/* ✅ CORRECTION 2: Augmentation du gap (espacement) et ajout de max-w pour gérer la largeur sur grand écran */}
+            <div className="mx-auto max-w-7xl md:max-w-8xl 
+                            columns-2 md:columns-3 lg:columns-4 xl:columns-5 
+                            gap-4">
                 {images.map((img, index) => {
-                    const delay = Math.min((index % 4) * 0.1, 0.3);
+                    const delay = Math.min((index % 5) * 0.1, 0.4); // Ajustement du délai pour 5 colonnes
 
                     return (
                         <div
@@ -59,8 +63,8 @@ export default function Gallery() {
                             }}
                             data-index={index}
                             onClick={() => handleViewDetails(img.id)} // Le bloc entier est cliquable
-                            // 🟢 CHANGEMENT CLÉ: mb-4 pour l'espacement vertical et break-inside-avoid
-                            className="relative mb-4 overflow-hidden rounded-lg shadow-lg group cursor-pointer break-inside-avoid"
+                            // ✅ CORRECTION 3: mb-6 pour augmenter l'espacement vertical
+                            className="relative mb-6 overflow-hidden rounded-lg shadow-lg group cursor-pointer break-inside-avoid"
                         >
                             <Image
                                 src={img.src}
