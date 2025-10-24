@@ -44,13 +44,12 @@ export default function Gallery() {
 
   return (
     <>
-        {/* ✅ CORRECTION 1: Augmentation du padding horizontal sur la section */}
-        <section className="max-w-screen-2xl mx-auto px-6 py-15" id="gallery">
+        {/* ✅ CORRECTION 1: La section prend maintenant toute la largeur de l'écran (Full Width) */}
+        <section className="px-6 py-15" id="gallery">
             
             {/* 🟢 CHANGEMENT CLÉ: Utilisation des classes 'columns-x' pour Masonry */}
-            {/* ✅ CORRECTION 2: Augmentation du gap (espacement) et ajout de max-w pour gérer la largeur sur grand écran */}
-            <div className="mx-auto max-w-7xl md:max-w-8xl 
-                            columns-2 md:columns-3 lg:columns-4 xl:columns-5 
+            {/* ✅ CORRECTION 2: Le conteneur de colonnes s'étend à la largeur maximale. Suppression des max-w. */}
+            <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 
                             gap-4">
                 {images.map((img, index) => {
                     const delay = Math.min((index % 5) * 0.1, 0.4); // Ajustement du délai pour 5 colonnes
