@@ -1,6 +1,4 @@
 import About from "./components/About";
-import AnimatedImage from "./components/AnimatedImage";
-import Description from "./components/Description";
 import Gallery from "./components/Gallery";
 import PortfolioGallery from "./components/PortfolioGallery";
 
