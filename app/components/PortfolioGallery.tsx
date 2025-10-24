@@ -1,4 +1,3 @@
-// app/PortfolioGallery.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -154,13 +153,11 @@ const PortfolioGallery = () => {
       />
     
       {/* Conteneur de gauche : Images à z-40 pour être CLICABLE */}
-      {/* ✅ CORRECTION : w-1/3 reste, mais on utilise max-w-[400px] pour chaque image */}
-      <div className="absolute top-0 left-5 h-full w-1/3 flex flex-col items-start justify-around -translate-x-24 z-[40]">
+      <div className="absolute top-15 left-50 h-full w-1/3 flex flex-col items-start justify-around -translate-x-24 z-[40]">
         
         {/* ... (Blocs d'images à gauche) ... */}
         <motion.div 
-          // ✅ AJOUT: max-w-[400px] pour limiter la largeur maximale
-          className={`w-[90%] h-[35%] max-w-[400px] -rotate-[9deg] transform origin-top-left -translate-y-10 ${imageContainerClasses}`}
+          className={`w-[70%] h-[35%] -rotate-[9deg] transform origin-top-left -translate-y-10 ${imageContainerClasses}`}
           onClick={() => handleImageClick("/gallery/24.jpeg")}
           variants={leftImageVariants} 
         >
@@ -172,8 +169,7 @@ const PortfolioGallery = () => {
         </motion.div>
         
         <motion.div 
-          // ✅ AJOUT: max-w-[400px] pour limiter la largeur maximale
-          className={`w-[90%] h-[35%] max-w-[400px] rotate-[5deg] transform origin-top-left -translate-y-12 ${imageContainerClasses}`}
+          className={`w-[70%] h-[35%] rotate-[5deg] transform origin-top-left -translate-y-12 ${imageContainerClasses}`}
           onClick={() => handleImageClick("/gallery/21.jpeg")}
           variants={leftImageVariants}
         >
@@ -185,8 +181,7 @@ const PortfolioGallery = () => {
         </motion.div>
 
         <motion.div 
-          // ✅ AJOUT: max-w-[400px] pour limiter la largeur maximale
-          className={`w-[90%] h-[35%] max-w-[400px] -rotate-[10deg] transform origin-top-left ${imageContainerClasses}`}
+          className={`w-[70%] h-[35%] -rotate-[10deg] transform origin-top-left ${imageContainerClasses}`}
           onClick={() => handleImageClick("/gallery/20.jpeg")}
           variants={leftImageVariants}
         >
@@ -238,12 +233,10 @@ const PortfolioGallery = () => {
       </div>
 
       {/* Conteneur de droite : Images à z-40 pour être CLICABLE */}
-      {/* ✅ CORRECTION : w-1/3 reste, mais on utilise max-w-[400px] pour chaque image */}
-      <div className="absolute top-0 right-0 h-full w-1/3 flex flex-col items-end justify-around translate-x-24 z-[40]">
+      <div className="absolute top-5 right-50 h-full w-1/3 flex flex-col items-end justify-around translate-x-24 z-[40]">
         
         <motion.div 
-          // ✅ AJOUT: max-w-[400px] pour limiter la largeur maximale
-          className={`w-[90%] h-[35%] max-w-[400px] rotate-[16deg] transform origin-top-right translate-y-20 ${imageContainerClasses}`}
+          className={`w-[70%] h-[35%] rotate-[16deg] transform origin-top-right translate-y-20 ${imageContainerClasses}`}
           onClick={() => handleImageClick("/gallery/19.jpeg")}
           variants={rightImageVariants}
         >
@@ -255,8 +248,7 @@ const PortfolioGallery = () => {
         </motion.div>
 
         <motion.div 
-          // ✅ AJOUT: max-w-[400px] pour limiter la largeur maximale
-          className={`w-[90%] h-[35%] max-w-[400px] -rotate-[10deg] transform origin-top-right -translate-y-12 ${imageContainerClasses}`}
+          className={`w-[70%] h-[35%] -rotate-[10deg] transform origin-top-right -translate-y-12 ${imageContainerClasses}`}
           onClick={() => handleImageClick("/gallery/22.jpeg")}
           variants={rightImageVariants}
         >
@@ -268,8 +260,7 @@ const PortfolioGallery = () => {
         </motion.div>
 
         <motion.div 
-          // ✅ AJOUT: max-w-[400px] pour limiter la largeur maximale
-          className={`w-[90%] h-[35%] max-w-[400px] rotate-[10deg] transform origin-top-right ${imageContainerClasses}`}
+          className={`w-[70%] h-[35%] rotate-[10deg] transform origin-top-right ${imageContainerClasses}`}
           onClick={() => handleImageClick("/gallery/12.jpg")}
           variants={rightImageVariants}
         >

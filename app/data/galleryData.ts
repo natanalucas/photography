@@ -17,5 +17,6 @@ export const images = [
     { id: 16, src: "/gallery/16.jpg", altKey: "desc_5" },
     { id: 17, src: "/gallery/17.jpg", altKey: "desc_6" },
     { id: 18, src: "/gallery/18.jpg", altKey: "desc_6" },
+    { id: 19, src: "/gallery/20.jpeg", altKey: "desc_6" },
     // ... continuez avec les clés pour toutes les images
 ];

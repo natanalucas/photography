@@ -126,12 +126,17 @@ export default function Navbar() {
 
   return (
     <nav 
+      // La NAV elle-même prend 100% de la largeur pour que le fond et le flou s'étendent.
       className={`fixed w-full ${topPositionClass} left-0 z-50 transition-colors duration-300 
                  bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(255,255,255,0.6)] 
                  dark:bg-gray-900/80 
                  dark:shadow-[0_4px_10px_rgba(0,0,0,0.3)]`} 
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* CORRECTION APPLIQUÉE ICI : 
+          Le conteneur interne limite la largeur du contenu (max-w-7xl) mais prend 
+          toute la largeur du parent (w-full) pour le centrage automatique (mx-auto). 
+      */}
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="flex justify-between h-16 items-center relative">
           
           {/* Logo */}
